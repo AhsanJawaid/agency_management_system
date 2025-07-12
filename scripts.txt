@@ -1,0 +1,54 @@
+cd agency_management_system
+mkdir -p app/templates
+mkdir -p app/static/css
+mkdir -p app/static/js
+python -m venv .venv
+touch .env wsgi.py Pipfile Pipfile.lock
+touch app/__init__.py app/routes.py app/models.py
+touch app/templates/home.html
+touch app/static/css/styles.css
+touch app/static/js/scripts.js
+
+pipenv install flask
+rm Pipfile.lock
+pipenv lock
+
+.venv\Scripts\activate.bat
+pip install flask flask-login flask-sqlalchemy
+
+mkdir -p app/auth
+touch app/auth/__init__.py
+touch app/auth/routes.py
+touch app/auth/forms.py
+
+touch app/templates/base.html
+touch app/templates/login.html
+touch app/templates/dashboard.html
+
+flask routes
+set FLASK_APP=wsgi.py
+
+mkdir -p app/freelancers
+mkdir -p app/templates/freelancers
+touch app/freelancers/routes.py
+touch app/templates/freelancers/list.html
+touch app/templates/freelancers/add.html
+touch app/templates/freelancers/edit.html
+
+mkdir -p app/projects
+mkdir -p app/templates/projects
+touch app/projects/routes.py
+touch app/templates/projects/list.html
+touch app/templates/projects/add.html
+touch app/templates/projects/edit.html
+
+mkdir -p app/contracts
+mkdir -p app/templates/contracts
+touch app/contracts/routes.py
+touch app/templates/contracts/list.html
+touch app/templates/contracts/add.html
+touch app/templates/contracts/edit.html
+
+pipenv install pymysql
+.venv\Scripts\activate
+pipenv install flask-wtf

@@ -1,0 +1,17 @@
+<!-- freelancers/list.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>Freelancers</h2>
+<table class="table table-bordered">
+  <thead><tr><th>Name</th><th>Skills</th><th>Rate</th></tr></thead>
+  <tbody>
+    {% for f in freelancers %}
+    <tr>
+      <td>{{ f.name }}</td>
+      <td>{{ f.skills }}</td>
+      <td>${{ f.hourly_rate }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
