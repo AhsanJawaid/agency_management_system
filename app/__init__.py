@@ -1,4 +1,5 @@
 from flask import Flask
+from app.models import db
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from .models import User
@@ -31,14 +32,16 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
+    # Register blueprints
     from .auth.routes import auth
-    app.register_blueprint(auth)
     from .utils.decorators import role_required
-    app.jinja_env.globals['role_required'] = role_required
     from .routes import main
-    app.register_blueprint(main)
+    from app.proposal import proposal_bp
 
-    from app.freelancers.routes import freelancers_bp
-    app.register_blueprint(freelancers_bp)
+    app.register_blueprint(auth)
+    app.register_blueprint(main)
+    app.register_blueprint(proposal_bp)
+
+    app.jinja_env.globals['role_required'] = role_required
 
     return app
