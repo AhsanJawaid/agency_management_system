@@ -1,6 +1,7 @@
 # models.py
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -83,11 +84,12 @@ class UserSkills(db.Model):
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user_email = db.Column(db.String(100), db.ForeignKey('user.email'))
     message = db.Column(db.String(255))
     timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
     is_read = db.Column(db.Boolean, default=False)
-
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship('User', foreign_keys=[user_email], backref='notifications')
 
 class Message(db.Model):
