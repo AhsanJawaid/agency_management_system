@@ -20,7 +20,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://root:{encoded_password
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 def create_app():
-    # app.config.from_pyfile('../.env', silent=True)
+    app.config.from_pyfile('../.env', silent=True)
 
     db.init_app(app)
 
@@ -37,12 +37,10 @@ def create_app():
     from .utils.decorators import role_required
     from .routes import main
     from app.proposal import proposal_bp
-    from .routes.notifications import notifications_bp
 
     app.register_blueprint(auth)
     app.register_blueprint(main)
     app.register_blueprint(proposal_bp)
-    app.register_blueprint(notifications_bp)
 
     app.jinja_env.globals['role_required'] = role_required
 
