@@ -19,6 +19,9 @@ class User(db.Model, UserMixin):
     hourly_rate = db.Column(db.Numeric(10, 2))
     milestone_rate = db.Column(db.Numeric(10, 2))
 
+    def get_id(self):
+        return self.email
+    
     def __repr__(self):
         return f"<User {self.email}>"
 

@@ -15,7 +15,7 @@
         <p><strong>Client Rating:</strong> ⭐ {{ job.client_rating }}</p>
         <a href="{{ job.link }}" class="btn btn-outline-primary" target="_blank">View Job</a>
         {% if current_user.is_authenticated %}
-            <a href="{{ url_for('proposal.submit', job_id=job.job_id) }}" class="btn btn-sm btn-success">Submit Proposal</a>
+            <a href="{{ url_for('proposal.submit_proposal', job_id=job.job_id) }}" class="btn btn-sm btn-success">Submit Proposal</a>
         {% else %}
             <a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-warning">Login to Propose</a>
         {% endif %}

@@ -1,7 +1,11 @@
 from flask import Flask
 from flask_login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
 from ..models import db, User
 import os
+
+db = SQLAlchemy()
+login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__)
@@ -11,16 +15,14 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://root:{encoded_password}@localhost/agency"
 
     db.init_app(app)
-
-    login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
-
-    @login_manager.user_loader
-    def login_user(user_id):
-        return User.query.get(int(user_id))
+    login_manager.login_view = 'auth.login'
 
     from app.auth.routes import auth
     app.register_blueprint(auth)
 
     return app
+
+@login_manager.user_loader
+def load_user(user_email):
+    return User.query.filter_by(email=user_email).first()
