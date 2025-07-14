@@ -136,3 +136,17 @@ def get_user_role(email):
     from app.models import Relationship
     rel = Relationship.query.filter_by(user_email=email).first()
     return rel.role if rel else None
+
+class OpportunityNotification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    job_link = db.Column(db.String(515))
+    description = db.Column(db.Text)
+    proposal = db.Column(db.Text)
+    feasibility = db.Column(db.Text)
+    team_breakdown = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+class DailyDigest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    summary = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
