@@ -4,18 +4,33 @@ from flask_login import UserMixin
 
 db = SQLAlchemy()
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'user'
 
+    id = db.Column(db.Integer)
     email = db.Column(db.String(255), primary_key=True)
     first_name = db.Column(db.String(100))
     last_name = db.Column(db.String(100))
+    password = db.Column(db.String(255))
     contact = db.Column(db.String(50))
     upwork_profile = db.Column(db.Text)
     connects_balance = db.Column(db.Integer)
     title = db.Column(db.String(255))
     hourly_rate = db.Column(db.Numeric(10, 2))
     milestone_rate = db.Column(db.Numeric(10, 2))
+
+    def __repr__(self):
+        return f"<User {self.email}>"
+
+    @property
+    def role(self):
+        rel = Relationship.query.filter_by(user_email=self.email).first()
+        return rel.role if rel else None
+    
+    def is_active(self):
+        rel = Relationship.query.filter_by(user_email=self.email).first()
+        return rel.status == "active" if rel else False
+
 
 class Jobs(db.Model):
     __tablename__ = 'jobs'

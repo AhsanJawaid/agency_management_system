@@ -17,6 +17,8 @@ google-genai = "*"
 spacy = "*"
 databases = "*"
 faker = "*"
+email-validator = "*"
+cryptography = "*"
 
 [dev-packages]
 

@@ -6,12 +6,14 @@ CREATE TABLE IF NOT EXISTS user (
     email VARCHAR(255) PRIMARY KEY,
     first_name VARCHAR(100),
     last_name VARCHAR(100),
+    password VARCHAR(255),
     contact VARCHAR(20),
     upwork_profile TEXT,
     connects_balance INT,
     title VARCHAR(255),
     hourly_rate DECIMAL(10, 2),
     milestone_rate DECIMAL(10, 2)
+    is_active TINYINT(1) DEFAULT 1
 );
 
 

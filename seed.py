@@ -4,6 +4,7 @@ from faker import Faker
 from datetime import date, timedelta
 import random
 from sqlalchemy import text
+from werkzeug.security import generate_password_hash
 
 app = create_app()
 fake = Faker()
@@ -62,6 +63,7 @@ with app.app_context():
             email=email,
             first_name=fake.first_name(),
             last_name=fake.last_name(),
+            password=generate_password_hash("Default1"),
             contact=fake.phone_number(),
             upwork_profile=fake.url(),
             connects_balance=random.randint(10, 60),

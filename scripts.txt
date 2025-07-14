@@ -52,5 +52,13 @@ touch app/templates/contracts/edit.html
 pipenv install pymysql
 .venv\Scripts\activate
 pipenv install flask-wtf
+pipenv install email-validator
+
+import secrets
+secret_key = secrets.token_hex(16)
+print(secret_key)
 
 python seed.py
+
+pip install setuptools wheel
+pip install https://github.com/pypa/setuptools/archive/refs/heads/main.zip

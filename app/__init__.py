@@ -9,10 +9,11 @@ import os
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', None)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', None)
 
 # Original password
-# raw_password = os.environ.get('DB_PASS', None)
-raw_password = "Admin@123!"
+raw_password = os.environ.get('DB_PASS', None)
+# raw_password = "Admin@123!"
 
 # Encode it
 encoded_password = quote_plus(raw_password)
@@ -29,13 +30,13 @@ def create_app():
     login_manager.init_app(app)
 
     @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))
+    def load_user(user_email):
+        return User.query.get(user_email)
 
     # Register blueprints
-    from .auth.routes import auth
-    from .utils.decorators import role_required
-    from .routes import main
+    from app.auth.routes import auth
+    from app.utils.decorators import role_required
+    from app.routes import main
     from app.proposal import proposal_bp
 
     app.register_blueprint(auth)
