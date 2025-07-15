@@ -87,19 +87,20 @@ CREATE TABLE IF NOT EXISTS project (
 
 
 CREATE TABLE IF NOT EXISTS tasks (
-    owner_email VARCHAR(255),    
-    job_id VARCHAR(100),
-    assigned_to_email VARCHAR(255),
-    created_datetime DATETIME,
-    deadline_datetime DATETIME,
-    completed_datetime DATETIME,
-    priority VARCHAR(50),
-    description TEXT,
-    PRIMARY KEY (owner_email, job_id, created_datetime),
-    FOREIGN KEY (job_id) REFERENCES project(job_id),
-    FOREIGN KEY (owner_email) REFERENCES project(owner_email),
-    FOREIGN KEY (assigned_to_email) REFERENCES user(email)
-);
+   task_id int UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+   owner_email varchar(255) NOT NULL,
+   job_id varchar(100) NOT NULL,
+   project_id varchar(100) DEFAULT NULL,
+   assigned_to_email varchar(255) DEFAULT NULL,
+   created_datetime datetime NOT NULL,
+   deadline_datetime datetime DEFAULT NULL,
+   completed_datetime datetime DEFAULT NULL,
+   priority varchar(50) DEFAULT NULL,
+   description text,
+   FOREIGN KEY (job_id) REFERENCES project (job_id),
+   FOREIGN KEY (owner_email) REFERENCES project (owner_email),
+   FOREIGN KEY (assigned_to_email) REFERENCES user (email)
+ );
 
 CREATE TABLE IF NOT EXISTS notification (
     id INT AUTO_INCREMENT PRIMARY KEY,

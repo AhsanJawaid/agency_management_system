@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Projects Listing{% endblock %}
+{% block content %}
+
+<h2>{{ project.title }}</h2>
+<label><b>Job Description:</b></label>
+<p>{{ project.description }}</p>
+
+<label><b>Status:</b></label>
+<p>{{ project.status }}</p>
+
+<label><b>Job ID:</b></label>
+<p>{{ project.job_id }}</p>
+
+<label><b>Created At:</b></label>
+<p>{{ project.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+
+<label><b>Job</b></label>
+<p>{{ project.job.title }}</p>
+
+<label><b>Job Stage:</b></label>
+<p>{{ project.job.stage }}</p>
+
+<label><b>Owner:</b></label>
+<p>{{ project.owner.first_name }}</p>
+
+<a class="btn btn-warning" href="{{ url_for('projects.update_project', id=project.id) }}">Edit</a><br/><br/>
+<form method="POST" action="{{ url_for('projects.delete_project', id=project.id) }}">
+  <button class="btn btn-danger" type="submit">Delete</button>
+</form>
+
+{% endblock %}

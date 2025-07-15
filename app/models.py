@@ -34,7 +34,6 @@ class User(db.Model, UserMixin):
         rel = Relationship.query.filter_by(user_email=self.email).first()
         return rel.status == "active" if rel else False
 
-
 class Jobs(db.Model):
     __tablename__ = 'jobs'
 
@@ -68,6 +67,25 @@ class Project(db.Model):
     job = db.relationship('Jobs', backref='project')
     owner = db.relationship('User', backref='projects')
 
+class Task(db.Model):
+    __tablename__ = 'tasks'
+
+    task_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    owner_email = db.Column(db.String(255), db.ForeignKey('user.email'))
+    job_id = db.Column(db.String(50), db.ForeignKey('jobs.job_id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
+    assigned_to_email = db.Column(db.String(255), db.ForeignKey('user.email'),)
+    created_datetime = db.Column(db.Date, default=db.func.current_date())
+    deadline_datetime = db.Column(db.Date)
+    completed_datetime = db.Column(db.Date)
+    priority = db.Column(db.String(50))
+    description = db.Column(db.Text)
+
+    # relationship
+    owner = db.relationship('User', foreign_keys=[owner_email])
+    assignee = db.relationship('User', foreign_keys=[assigned_to_email])
+    job = db.relationship('Jobs', backref='tasks')
+    project = db.relationship('Project', backref='tasks')
 
 class Proposal(db.Model):
     __tablename__ = 'proposal'
@@ -119,7 +137,6 @@ class Message(db.Model):
     sender = db.relationship('User', foreign_keys=[sender_email], backref='sent_messages')
     receiver = db.relationship('User', foreign_keys=[receiver_email], backref='received_messages')
 
-
 class Relationship(db.Model):
     __tablename__ = 'relationships'
 
@@ -130,7 +147,6 @@ class Relationship(db.Model):
 
     user = db.relationship('User', foreign_keys=[user_email], backref='roles')
     manager = db.relationship('User', foreign_keys=[manager_email], backref='managed_users')
-
 
 def get_user_role(email):
     from app.models import Relationship

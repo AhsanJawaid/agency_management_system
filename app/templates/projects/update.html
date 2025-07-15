@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Projects Listing{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h2>Your Projects</h2>
+  <a href="{{ url_for('main.dashboard') }}">Dashboard</a> / <a href="{{ url_for('projects.list_projects') }}">Projects Listing</a>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">{{ form.job_id.label }} {{ form.job_id(class="form-control") }}</div>
+    <div class="mb-3">{{ form.title.label }} {{ form.title(class="form-control") }}</div>
+    <div class="mb-3">{{ form.description.label }} {{ form.description(class="form-control") }}</div>
+    <div class="mb-3">{{ form.status.label }} {{ form.status(class="form-control") }}</div>
+    {{ form.submit(class="btn btn-primary") }}
+  </form>
+</div>
+{% endblock %}

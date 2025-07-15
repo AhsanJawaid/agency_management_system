@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Jobs Listing{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2>All Jobs</h2>
+  <a href="{{ url_for('jobs.create_job') }}">➕ Create Job</a>
+  <ul>
+    {% for job in jobs %}
+      <li>
+        <strong>{{ job.title }}</strong> — {{ job.stage }}
+        <a href="{{ url_for('jobs.view_job', job_id=job.job_id) }}">View</a>
+        <a href="{{ url_for('jobs.update_job', job_id=job.job_id) }}">Edit</a>
+        <form method="POST" action="{{ url_for('jobs.delete_job', job_id=job.job_id) }}" style="display:inline;">
+          <button class="btn btn-danger" type="submit">Delete</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+
+</div>
+{% endblock %}

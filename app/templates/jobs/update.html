@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Update Job{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h2>Update Job: {{ job.title }}</h2>
+  <a href="{{ url_for('main.dashboard') }}">Dashboard</a> / <a href="{{ url_for('jobs.list_jobs') }}">Jobs Listing</a>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">{{ form.job_id.label }} {{ form.job_id(readonly=True,class="form-control") }}</div>
+    <div class="mb-3">{{ form.title.label }} {{ form.title(class="form-control") }}</div>
+    <div class="mb-3">{{ form.description.label }} {{ form.description(class="form-control") }}</div>
+    <div class="mb-3">{{ form.category.label }} {{ form.category(class="form-control") }}</div>
+    <div class="mb-3">{{ form.skills_requested.label }} {{ form.skills_requested(class="form-control") }}</div>
+    <div class="mb-3">{{ form.deadline.label }} {{ form.deadline(class="form-control") }}</div>
+    <div class="mb-3">{{ form.expected_cost.label }} {{ form.expected_cost(class="form-control") }}</div>
+    <div class="mb-3">{{ form.expected_earning.label }} {{ form.expected_earning(class="form-control") }}</div>
+    <div class="mb-3">{{ form.client_rating.label }} {{ form.client_rating(class="form-control") }}</div>
+    <div class="mb-3">{{ form.feasibility_score.label }} {{ form.feasibility_score(class="form-control") }}</div>
+    <div class="mb-3">{{ form.link.label }} {{ form.link(class="form-control") }}</div>
+    <div class="mb-3">{{ form.stage.label }} {{ form.stage(class="form-control") }}</div>
+    {{ form.submit(class="btn btn-primary") }}
+  </form>
+</div>
+{% endblock %}

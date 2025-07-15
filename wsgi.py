@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '.env'))
 
 # Set the secret key from environment variable or use a default
-SECRET_KEY = os.getenv('SECRET_KEY', '8f0629a3c5f177edd835dc9dde03fd9e6c25d5aa211ade1eaf46db1c6325d03f')
+SECRET_KEY = os.getenv('SECRET_KEY', None)
 
 
 app = create_app()

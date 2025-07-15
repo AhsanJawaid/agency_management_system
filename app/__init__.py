@@ -3,7 +3,6 @@ from app.models import db
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from .models import User
-from .models import db
 from urllib.parse import quote_plus
 import os
 
@@ -38,10 +37,16 @@ def create_app():
     from app.utils.decorators import role_required
     from app.routes import main
     from app.proposal import proposal_bp
+    from app.jobs.routes import jobs_bp
+    from app.projects.routes import projects_bp
+    from app.tasks.routes import tasks_bp
 
     app.register_blueprint(auth)
     app.register_blueprint(main)
     app.register_blueprint(proposal_bp)
+    app.register_blueprint(jobs_bp)
+    app.register_blueprint(projects_bp)
+    app.register_blueprint(tasks_bp)
 
     app.jinja_env.globals['role_required'] = role_required
 

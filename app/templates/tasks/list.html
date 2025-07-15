@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Projects Listing{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2>My Tasks</h2>
+<a href="{{ url_for('tasks.create_task') }}">➕ Create Task</a>
+<ul>
+  {% for task in tasks %}
+    <li>
+      <strong>{{ task.description }}</strong> — {{ task.priority }}
+      <br>
+      <small>Deadline: {{ task.deadline_datetime }}</small><br>
+      <small>Assigned To: {{ task.assigned_to_email }}</small>
+
+      <a href="{{ url_for('tasks.view_task', task_id=task.task_id) }}">View</a>
+      <a href="{{ url_for('tasks.update_task', task_id=task.task_id) }}">Edit</a>
+      <form method="POST" action="{{ url_for('tasks.delete_task', task_id=task.task_id) }}" style="display:inline;">
+        <button class="btn btn-danger" type="submit">Delete</button>
+      </form>
+    </li>
+  {% endfor %}
+</ul>
+  <a href="{{ url_for('main.dashboard') }}">Dashboard</a> / <a href="{{ url_for('tasks.list_tasks') }}">Tasks Listing</a>
+</div>
+{% endblock %}

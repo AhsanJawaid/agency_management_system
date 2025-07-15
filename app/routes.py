@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template
-from app.models import db, Jobs
+from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask_login import login_required, current_user
+from app.models import db, Project, Task, Jobs, User
+from datetime import date
 
 main = Blueprint('main', __name__)
 
@@ -10,5 +12,21 @@ def home():
 
 
 @main.route('/dashboard')
+@login_required
 def dashboard():
-    return render_template('dashboard.html')
+    projects = Project.query.filter_by(owner_email=current_user.email).all()
+    tasks = Task.query.filter_by(owner_email=current_user.email).all()
+    jobs = Jobs.query.all()
+    return render_template('dashboard.html', projects=projects, tasks=tasks, jobs=jobs)
+
+@main.route('/jobs')
+@login_required
+def jobs():
+    jobs = Job.query.all()
+    return render_template('jobs.html', jobs=jobs)
+
+@main.route('/users')
+@login_required
+def users():
+    users = User.query.all()
+    return render_template('users.html', users=users)

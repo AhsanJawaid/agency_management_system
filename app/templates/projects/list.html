@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Projects Listing{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2>Your Projects</h2>
+  <a href="{{ url_for('projects.create_project') }}">➕ Create New</a>
+  <ul>
+    {% for project in projects %}
+      <li>
+        <a href="{{ url_for('projects.view_project', id=project.id) }}">
+          {{ project.title }} — {{ project.status }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

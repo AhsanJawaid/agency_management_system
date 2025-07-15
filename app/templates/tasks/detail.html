@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Projects Listing{% endblock %}
+{% block content %}
+
+
+<h2>Task Details</h2>
+<label><b>Description:</b></label>
+<p>{{ task.description }}</p>
+
+<label><b>Priority:</b></label>
+<p>{{ task.priority }}</p>
+
+<label><b>Assigned To:</b></label>
+<p>{{ task.assigned_to_email }}</p>
+
+  <label><b>Deadline:</b></label>
+<p>{{ task.deadline_datetime }}</p>
+
+<label><b>Created:</b></label>
+<p>{{ task.created_datetime }}</p>
+
+<label><b>Completed:</b></label>
+<p>{{ task.completed_datetime or 'Not completed yet' }}</p>
+
+<label><b>Owner:</b></label>
+<p>{{ task.owner_email }}</p>
+
+<label><b>Job:</b></label>
+<p>{{ task.job_id }}</p>
+
+<label><b>Project:</b></label>
+<p>{{ task.project_id }}</p>
+
+<a class="btn btn-warning" href="{{ url_for('tasks.update_task', task_id=task.task_id) }}">Edit</a>
+<form method="POST" action="{{ url_for('tasks.delete_task', task_id=task.task_id) }}">
+  <button class="btn btn-danger" type="submit">Delete</button>
+</form>
+{% endblock %}
