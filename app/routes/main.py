@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+from app.models import Jobs
 
 main = Blueprint('main', __name__)
 
@@ -9,4 +10,5 @@ def home():
 
 @main.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    jobs = Jobs.query.all()
+    return render_template('dashboard.html', jobs=jobs)

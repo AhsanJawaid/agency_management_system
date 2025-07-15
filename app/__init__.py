@@ -5,7 +5,8 @@ from flask_login import LoginManager
 from .models import User
 from .models import db
 from urllib.parse import quote_plus
-# from app.routes.notifications import notifications
+from app.routes.main import main
+from app.routes.notifications import notifications
 import os
 
 app = Flask(__name__)
@@ -42,12 +43,12 @@ def create_app():
     from app.utils.decorators import role_required
     from app.routes import main
     from app.proposal import proposal_bp
-    # from app.routes.notifications import notifications
+    from app.routes.notifications import notifications
 
     app.register_blueprint(auth)
     app.register_blueprint(main)
     app.register_blueprint(proposal_bp)
-    # app.register_blueprint(notifications)
+    app.register_blueprint(notifications)
 
     app.jinja_env.globals['role_required'] = role_required
 
