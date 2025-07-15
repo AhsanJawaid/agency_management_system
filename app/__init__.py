@@ -43,12 +43,14 @@ def create_app():
     from app.utils.decorators import role_required
     from app.routes import main
     from app.proposal import proposal_bp
-    from app.routes.notifications import notifications
+    # from app.routes.notifications import notifications
+    
 
     app.register_blueprint(auth)
     app.register_blueprint(main)
     app.register_blueprint(proposal_bp)
     app.register_blueprint(notifications)
+    
 
     app.jinja_env.globals['role_required'] = role_required
 
