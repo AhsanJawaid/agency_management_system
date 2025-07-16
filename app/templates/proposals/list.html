@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Proposals for "{{ job.title }}"</h2>
+  <ul>
+    {% for p in proposals %}
+      <li>
+        <a href="{{ url_for('proposals.detail', proposal_id=p.id) }}">
+          {{ p.owner_email }} — ${{ p.bid_amount }} on {{ p.created_at.strftime('%Y-%m-%d') }}
+        </a>
+      </li>
+    {% else %}
+      <li>No proposals yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Proposal by {{ proposal.owner_email }}</h2>
+  <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+  <p><strong>Job:</strong> {{ proposal.job.title }}</p>
+  <p><strong>Bid:</strong> ${{ proposal.bid_amount }}</p>
+  <p><strong>Submitted:</strong> {{ proposal.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+  <h3>Cover Letter</h3>
+  <p>{{ proposal.cover_letter }}</p>
+{% endblock %}
