@@ -1,6 +1,8 @@
 from flask import Flask, render_template
 from app.extensions import db, login_manager, mail
 from app.routes import register_blueprints
+from dotenv import load_dotenv
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
