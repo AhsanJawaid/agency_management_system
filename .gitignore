@@ -3,39 +3,22 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Virtual environment
+.venv/
+env/
+venv/
+
 # Environment variables
 .env
-*.env
+.env.*
 
-# Flask instance folder
-instance/
-
-# Flask cache and logs
-*.log
-*.pot
-*.pyc
-*.pyo
-*.pyd
-
-# Virtual environment
-venv/
-ENV/
-env/
-
-# IDE and editor files
+# IDE / Editor files
 .vscode/
 .idea/
-*.swp
-*.swo
-*.sublime-workspace
-*.sublime-project
 
-# System files
+# OS files
 .DS_Store
 Thumbs.db
 
-# Pip dependency files
-*.egg-info/
-.eggs/
-dist/
-build/
+# Pipenv
+Pipfile.lock
