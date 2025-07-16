@@ -23,7 +23,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('tasks.list_tasks') }}">My Tasks</a></li>
                     {% endif %}
                 </ul>
-                <ul class="navbar-nav ms-auto">
+                <!-- <ul class="navbar-nav ms-auto">
                     {% if current_user.is_authenticated  %}
                         <li class="nav-item">Welcome, <strong>{{ current_user.first_name }}</strong></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a></li>
@@ -31,7 +31,51 @@
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Login</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.signup') }}">Sign Up</a></li>
                     {% endif %}
-                </ul>
+                </ul> -->
+                <ul class="navbar-nav ms-auto">
+    {% if current_user.is_authenticated %}
+        <!-- Notification Dropdown -->
+        <li class="nav-item dropdown me-3">
+            <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-bell fa-lg"></i>
+                {% if unread_notifications > 0 %}
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ unread_notifications }}
+                </span>
+                {% endif %}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown"
+                style="width: 300px; max-height: 250px; overflow-y: auto;">
+                {% if notifications %}
+                    {% for note in notifications %}
+                        <li class="dropdown-item d-flex justify-content-between {% if not note.read %}fw-bold{% endif %}">
+                            <span>{{ note.message }}</span>
+                            <small class="text-muted">
+                                {% if note.created_at %}
+                                    {{ note.created_at.strftime('%H:%M') }}
+                                {% else %}
+                                    Unknown
+                                {% endif %}
+                            </small>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="dropdown-item text-muted">No notifications</li>
+                {% endif %}
+            </ul>
+        </li>
+
+        <!-- User Menu -->
+        <li class="nav-item">Welcome, <strong>{{ current_user.first_name }}</strong></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a></li>
+    {% else %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.signup') }}">Sign Up</a></li>
+    {% endif %}
+</ul>
+
+
             </div>
         </div>
     </nav>

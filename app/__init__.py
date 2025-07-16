@@ -1,10 +1,12 @@
 from flask import Flask
 from app.models import db
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from .models import User
 from urllib.parse import quote_plus
 import os
+from app.models import Notification
+
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', None)
@@ -32,6 +34,16 @@ def create_app():
     def load_user(user_email):
         return User.query.get(user_email)
 
+    @app.context_processor
+    def inject_notifications():
+        if current_user.is_authenticated:
+            notifications = Notification.query.filter_by(user_id=current_user.id).order_by(Notification.created_at.desc()).limit(10).all()
+            unread_count = Notification.query.filter_by(user_id=current_user.id, read=False).count()
+        else:
+            notifications = []
+            unread_count = 0
+        return dict(notifications=notifications, unread_notifications=unread_count)
+
     # Register blueprints
     from app.auth.routes import auth
     from app.utils.decorators import role_required
@@ -40,6 +52,7 @@ def create_app():
     from app.jobs.routes import jobs_bp
     from app.projects.routes import projects_bp
     from app.tasks.routes import tasks_bp
+    from app.routes.notifications import notifications
 
     app.register_blueprint(auth)
     app.register_blueprint(main)
@@ -47,6 +60,7 @@ def create_app():
     app.register_blueprint(jobs_bp)
     app.register_blueprint(projects_bp)
     app.register_blueprint(tasks_bp)
+    app.register_blueprint(notifications)
 
     app.jinja_env.globals['role_required'] = role_required
 

@@ -1,0 +1,15 @@
+<!-- templates/notifications/list.html -->
+{% extends "base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<h2>Your Notifications</h2>
+<ul class="list-group">
+    {% for note in notifications %}
+    <li class="list-group-item {% if not note.read %}list-group-item-warning{% endif %}">
+        <strong>{{ note.message }}</strong> <small class="text-muted">{{ note.time }}</small>
+    </li>
+    {% else %}
+    <li class="list-group-item text-muted">No notifications</li>
+    {% endfor %}
+</ul>
+{% endblock %}

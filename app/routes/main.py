@@ -1,3 +1,18 @@
+# from flask import Blueprint, render_template
+# from app.models import Jobs
+
+# main = Blueprint('main', __name__)
+
+# @main.route('/')
+# def home():
+#     return render_template('home.html')
+#     # return "Hello from Main!"
+
+# @main.route('/dashboard')
+# def dashboard():
+#     jobs = Jobs.query.all()
+#     return render_template('dashboard.html', jobs=jobs)
+
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
 from app.models import db, Project, Task, Jobs, User
@@ -30,3 +45,5 @@ def jobs():
 def users():
     users = User.query.all()
     return render_template('users.html', users=users)
+
+
