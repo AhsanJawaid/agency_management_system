@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit Freelancer' if form.email.data else 'Add Freelancer' }} | Agency System{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb bg-transparent p-0 mb-0">
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('freelancers.list_freelancers') }}">Freelancers</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        {{ 'Edit' if form.email.data else 'Add' }}
+      </li>
+    </ol>
+  </nav>
+
+  <!-- Form Card -->
+  <div class="card shadow-sm border-0 mx-auto" style="max-width: 700px;">
+    <div class="card-header text-white" style="background: var(--bs-gradient);">
+      <h4 class="mb-0">{{ 'Edit Freelancer' if form.email.data else 'Add New Freelancer' }}</h4>
+    </div>
+
+    <div class="card-body">
+      <form method="POST" class="row g-3">
+        {{ form.hidden_tag() }}
+
+        <div class="col-12">
+          {{ form.email.label(class="form-label") }}
+          {{ form.email(class="form-control", placeholder="freelancer@example.com") }}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.first_name.label(class="form-label") }}
+          {{ form.first_name(class="form-control", placeholder="First name") }}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.last_name.label(class="form-label") }}
+          {{ form.last_name(class="form-control", placeholder="Last name") }}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.contact.label(class="form-label") }}
+          {{ form.contact(class="form-control", placeholder="Contact number") }}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.title.label(class="form-label") }}
+          {{ form.title(class="form-control", placeholder="Freelancer role or expertise") }}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.hourly_rate.label(class="form-label") }}
+          {{ form.hourly_rate(class="form-control", placeholder="e.g. 20.00") }}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.connects_balance.label(class="form-label") }}
+          {{ form.connects_balance(class="form-control", placeholder="Connects available") }}
+        </div>
+
+        <div class="col-12">
+          {{ form.milestone_rates.label(class="form-label") }}
+          {{ form.milestone_rates(class="form-control", placeholder="e.g. Design: $100, Development: $300") }}
+        </div>
+
+        <div class="col-12">
+          {{ form.upwork_profile.label(class="form-label") }}
+          {{ form.upwork_profile(class="form-control", placeholder="https://www.upwork.com/profile/..." ) }}
+        </div>
+
+        <div class="col-12">
+          <div class="form-check form-switch">
+            {{ form.is_active(class="form-check-input", id="isActiveSwitch") }}
+            <label class="form-check-label" for="isActiveSwitch">
+              {{ form.is_active.label.text }}
+            </label>
+          </div>
+        </div>
+
+        {% if not form.email.data %}
+        <div class="col-12">
+          {{ form.manager_email.label(class="form-label") }}
+          {{ form.manager_email(class="form-control", placeholder="Manager email") }}
+        </div>
+        {% endif %}
+
+        <div class="col-12 text-end">
+          <a href="{{ url_for('freelancers.list_freelancers') }}" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-arrow-left me-1"></i>Cancel
+          </a>
+          {{ form.submit(class="btn btn-accent px-4") }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

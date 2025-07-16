@@ -1,27 +1,74 @@
 {% extends 'base.html' %}
-{% block title %}Job Listings{% endblock %}
+{% block title %}Explore Freelance Jobs{% endblock %}
+
 {% block content %}
-<h2 class="mb-4">Explore Freelance Jobs</h2>
-<div class="row">
-  {% for job in jobs %}
-  <div class="col-md-6 mb-4">
-    <div class="card h-100 shadow-sm">
-      <div class="card-body">
-        <h5 class="card-title">{{ job.title }}</h5>
-        <p class="card-text">{{ job.description[:150] }}...</p>
-        <p><strong>Category:</strong> {{ job.category }}</p>
-        <p><strong>Skills:</strong> {{ job.skills_requested }}</p>
-        <p><strong>Posted:</strong> {{ job.date_posted.strftime('%b %d, %Y') }}</p>
-        <p><strong>Client Rating:</strong> ⭐ {{ job.client_rating }}</p>
-        <a href="{{ job.link }}" class="btn btn-outline-primary" target="_blank">View Job</a>
-        {% if current_user.is_authenticated %}
-            <a href="{{ url_for('proposals.submit_proposal', job_id=job.job_id) }}" class="btn btn-sm btn-success">Submit Proposal</a>
-        {% else %}
-            <a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-warning">Login to Propose</a>
-        {% endif %}
-      </div>
-    </div>
+<div class="py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">Explore Freelance Jobs</h2>
+    <form method="GET" action="{{ url_for('main.index') }}" class="d-flex mb-4">
+      <input class="form-control me-2" type="search" name="q" placeholder="Search jobs…" value="{{ q }}" />
+      <button class="btn btn-accent" type="submit">
+        <i class="bi bi-search me-1"></i>Search
+      </button>
+    </form>
   </div>
-  {% endfor %}
+
+  <div class="row gy-4">
+    {% for job in jobs %}
+      <div class="col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <!-- Card Header with Gradient -->
+          <div
+            class="card-header text-white"
+            style="background: var(--bs-gradient);"
+          >
+            <h5 class="card-title mb-0">{{ job.title }}</h5>
+          </div>
+
+          <div class="card-body">
+            <p class="card-text text-muted">{{ job.description[:150] }}…</p>
+            <div class="mb-3">
+              <span class="badge bg-primary me-1">{{ job.category }}</span>
+              <span class="badge bg-secondary">{{ job.skills_requested }}</span>
+            </div>
+            <p class="mb-1 text-sm">
+              <i class="bi bi-calendar-event me-1"></i>
+              {{ job.date_posted.strftime('%b %d, %Y') }}
+            </p>
+            <p class="mb-0 text-sm">
+              <i class="bi bi-star-fill text-warning me-1"></i>
+              {{ job.client_rating }}
+            </p>
+          </div>
+
+          <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
+            <a
+              href="{{ job.link }}"
+              class="btn btn-outline-primary"
+              target="_blank"
+            >
+              <i class="bi bi-box-arrow-up-right me-1"></i>View Job
+            </a>
+
+            {% if current_user.is_authenticated %}
+              <a
+                href="{{ url_for('proposals.submit_proposal', job_id=job.job_id) }}"
+                class="btn btn-accent"
+              >
+                <i class="bi bi-file-earmark-text me-1"></i>Submit Proposal
+              </a>
+            {% else %}
+              <a
+                href="{{ url_for('auth.login') }}"
+                class="btn btn-warning"
+              >
+                <i class="bi bi-lock-fill me-1"></i>Login to Propose
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}

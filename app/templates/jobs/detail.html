@@ -1,38 +1,96 @@
 {% extends 'base.html' %}
-{% block title %}Job Detail{% endblock %}
+{% block title %}Job Detail | Agency System{% endblock %}
+
 {% block content %}
+<div class="container py-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb bg-transparent p-0 mb-0">
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('jobs.list_jobs') }}">Jobs</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Detail</li>
+    </ol>
+  </nav>
 
-<h2>{{ job.title }}</h2>
-<label><b>ID:</b></label>
-<p>{{ job.job_id }}</p>
+  <!-- Job Detail Card -->
+  <div class="card shadow-sm border-0">
+    <!-- Header with Gradient -->
+    <div class="card-header text-white" style="background: var(--bs-gradient);">
+      <h3 class="mb-0">{{ job.title }}</h3>
+    </div>
 
-<label><b>ID:</b></label>
-<p><strong>Description:</strong> {{ job.description }}</p>
+    <div class="card-body">
+      <dl class="row mb-0">
+        <dt class="col-sm-3">Job ID</dt>
+        <dd class="col-sm-9">{{ job.job_id }}</dd>
 
-<label><b>Category</b></label>
-<p>{{ job.category }}</p>
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">{{ job.description }}</dd>
 
-<label><b>Skills:</b></label>
-<p>{{ job.skills_requested }}</p>
+        <dt class="col-sm-3">Category</dt>
+        <dd class="col-sm-9">
+          <span class="badge bg-primary">{{ job.category }}</span>
+        </dd>
 
-<label><b>Deadline:</b></label>
-<p>{{ job.deadline }}</p>
+        <dt class="col-sm-3">Skills</dt>
+        <dd class="col-sm-9">
+          <span class="badge bg-secondary">{{ job.skills_requested }}</span>
+        </dd>
 
-<label><b>Client Rating:</b></label>
-<p>{{ job.client_rating }}</p>
+        <dt class="col-sm-3">Deadline</dt>
+        <dd class="col-sm-9">
+          {{ job.deadline.strftime('%Y-%m-%d') if job.deadline else '—' }}
+        </dd>
 
-<label><b>Feasibility:</b></label>
-<p>{{ job.feasibility_score }}</p>
+        <dt class="col-sm-3">Client Rating</dt>
+        <dd class="col-sm-9">
+          <i class="bi bi-star-fill text-warning me-1"></i>{{ job.client_rating }}
+        </dd>
 
-<label><b>Stage:</b></label>
-<p>{{ job.stage }}</p>
+        <dt class="col-sm-3">Feasibility</dt>
+        <dd class="col-sm-9">{{ job.feasibility_score }}</dd>
 
-<label><b>Link:</b></label>
-<p><a href="{{ job.link }}">{{ job.link }}</a></p>
+        <dt class="col-sm-3">Stage</dt>
+        <dd class="col-sm-9">
+          <span class="badge 
+            {% if job.stage=='Open' %}bg-success
+            {% elif job.stage=='Closed' %}bg-secondary
+            {% else %}bg-warning{% endif %}
+          ">
+            {{ job.stage }}
+          </span>
+        </dd>
 
-<a class="btn btn-warning" href="{{ url_for('jobs.update_job', job_id=job.job_id) }}">Edit</a><br/><br/>
-<form method="POST" action="{{ url_for('jobs.delete_job', job_id=job.job_id) }}">
-  <button class="btn btn-danger" type="submit">Delete</button>
-</form>
+        <dt class="col-sm-3">Link</dt>
+        <dd class="col-sm-9">
+          <a href="{{ job.link }}" target="_blank" class="link-accent">
+            <i class="bi bi-box-arrow-up-right me-1"></i>{{ job.link }}
+          </a>
+        </dd>
+      </dl>
+    </div>
 
+    <!-- Actions -->
+    <div class="card-footer bg-transparent border-top-0 d-flex justify-content-end gap-2">
+      <a href="{{ url_for('jobs.update_job', job_id=job.job_id) }}"
+         class="btn btn-outline-warning">
+        <i class="bi bi-pencil me-1"></i>Edit
+      </a>
+      <form method="POST" action="{{ url_for('jobs.delete_job', job_id=job.job_id) }}" class="d-inline">
+        <button type="submit"
+                class="btn btn-outline-danger"
+                onclick="return confirm('Delete this job?');">
+          <i class="bi bi-trash me-1"></i>Delete
+        </button>
+      </form>
+      <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>Back to List
+      </a>
+    </div>
+  </div>
+</div>
 {% endblock %}

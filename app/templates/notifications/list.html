@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Notifications | Agency System{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h4 class="fw-bold mb-4">🔔 Notifications</h4>
+  <ul class="list-group shadow-sm">
+    {% for n in notifs %}
+    <li class="list-group-item d-flex justify-content-between align-items-center {% if not n.is_read %}list-group-item-warning{% endif %}">
+      <div>
+        {{ n.message }}
+        {% if n.link %}
+        <a href="{{ n.link }}" class="ms-2">View</a>
+        {% endif %}
+        <br>
+        <small class="text-muted">{{ n.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+      </div>
+      {% if not n.is_read %}
+      <a href="{{ url_for('notifications.mark_as_read', id=n.id) }}" class="btn btn-sm btn-outline-success">Mark as read</a>
+      {% endif %}
+    </li>
+    {% else %}
+    <li class="list-group-item text-muted">No notifications yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

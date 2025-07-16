@@ -1,15 +1,42 @@
 {% extends "base.html" %}
+{% block title %}Proposals | Agency System{% endblock %}
+
 {% block content %}
-  <h2>Proposals for "{{ job.title }}"</h2>
-  <ul>
-    {% for p in proposals %}
-      <li>
-        <a href="{{ url_for('proposals.detail', proposal_id=p.id) }}">
-          {{ p.owner_email }} — ${{ p.bid_amount }} on {{ p.created_at.strftime('%Y-%m-%d') }}
-        </a>
+<div class="container py-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb bg-transparent p-0 mb-0">
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
       </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Proposals for "{{ job.title }}"
+      </li>
+    </ol>
+  </nav>
+
+  <!-- Proposals List -->
+  <div class="list-group shadow-sm">
+    {% for p in proposals %}
+      <a
+        href="{{ url_for('proposals.detail', proposal_id=p.id) }}"
+        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+      >
+        <div>
+          <h6 class="mb-1">{{ p.proposer_email }}</h6>
+          <small class="text-muted">
+            {{ p.created_at.strftime('%b %d, %Y') }}
+          </small>
+        </div>
+        <span class="badge bg-success rounded-pill">
+          ${{ "%.2f"|format(p.bid_amount) }}
+        </span>
+      </a>
     {% else %}
-      <li>No proposals yet.</li>
+      <div class="list-group-item text-center text-muted">
+        No proposals yet.
+      </div>
     {% endfor %}
-  </ul>
+  </div>
+</div>
 {% endblock %}

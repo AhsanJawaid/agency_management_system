@@ -6,6 +6,8 @@ from app.models.job import Jobs
 from app.models.task import Task
 from app.models.project import Project
 from app.forms.task_form import TaskForm
+from app.utils.notifications import create_notification
+from app.utils.emails import send_email
 
 tasks_bp = Blueprint('tasks', __name__, url_prefix='/tasks')
 
@@ -41,6 +43,25 @@ def create_task():
         db.session.add(task)
         db.session.commit()
         flash("Task created!")
+        # Notify freelancer
+        create_notification(
+            recipient_email=task.assigned_to_email,
+            message=f"New task assigned: '{task.description}' with priority {task.priority}",
+            link=url_for('tasks.view_task', task_id=task.task_id)
+        )
+
+        create_notification(
+            recipient_email=task.owner_email,
+            message=f"Task created and assigned to {task.assigned_to_email}: '{task.description}'",
+            link=url_for('tasks.view_task', task_id=task.task_id)
+        )
+
+        send_email(
+            subject="New Task Assigned",
+            recipients=[task.assigned_to_email],
+            body_text=f"You've been assigned a new task: {task.description}",
+            body_html=f"<p>New task: <strong>{task.description}</strong><br>Deadline: {task.deadline_datetime}</p>"
+        )
         return redirect(url_for('tasks.list_tasks'))
     return render_template('tasks/create.html', form=form)
 

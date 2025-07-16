@@ -1,35 +1,159 @@
 {% extends 'base.html' %}
-{% block title %}Dashboard{% endblock %}
-{% block content %}
-<h2>Welcome, {{ current_user.first_name }}!</h2>
+{% block title %}Dashboard | Agency System{% endblock %}
 
-<div class="row">
+{% block content %}
+<div class="container py-5">
+  <h2 class="fw-bold mb-4">Welcome, {{ current_user.first_name }}!</h2>
+
+  <div class="row g-4">
+    <!-- Jobs Card -->
     <div class="col-md-4">
-        <div class="card text-bg-primary mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Available Jobs ({{ jobs_count }})</h5>
-                <p class="card-text">Manage job listings.</p>
-                <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-light">View</a>
-            </div>
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-gradient text-white">
+          <i class="bi bi-briefcase-fill me-2"></i>
+          Active Jobs
         </div>
+        <div class="card-body text-center">
+          <h3 class="display-5">{{ jobs_count }}</h3>
+          <p class="text-muted">Manage job listings</p>
+          <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-accent">
+            View Jobs
+          </a>
+        </div>
+      </div>
     </div>
+
+    <!-- Projects Card -->
     <div class="col-md-4">
-        <div class="card text-bg-success mb-3">
-            <div class="card-body">
-                <h5 class="card-title">My Projects ({{ projects_count }})</h5>
-                <p class="card-text">Track active and completed projects.</p>
-                <a href="{{ url_for('projects.list_projects') }}" class="btn btn-light">View</a>
-            </div>
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-gradient text-white">
+          <i class="bi bi-kanban-fill me-2"></i>
+          My Projects
         </div>
+        <div class="card-body text-center">
+          <h3 class="display-5">{{ projects_count }}</h3>
+          <p class="text-muted">Track active & completed projects</p>
+          <a href="{{ url_for('projects.list_projects') }}" class="btn btn-accent">
+            View Projects
+          </a>
+        </div>
+      </div>
     </div>
+
+    <!-- Tasks Card -->
     <div class="col-md-4">
-        <div class="card text-bg-warning mb-3">
-            <div class="card-body">
-                <h5 class="card-title">My Tasks ({{ tasks_count }})</h5>
-                <p class="card-text">Review tasks and update current progress.</p>
-                <a href="{{ url_for('tasks.list_tasks') }}" class="btn btn-light">View</a>
-            </div>
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-gradient text-white">
+          <i class="bi bi-check2-square me-2"></i>
+          My Tasks
         </div>
+        <div class="card-body text-center">
+          <h3 class="display-5">{{ tasks_count }}</h3>
+          <p class="text-muted">Review tasks & update progress</p>
+          <a href="{{ url_for('tasks.list_tasks') }}" class="btn btn-accent">
+            View Tasks
+          </a>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Charts-->
+  <div class="row g-4 mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-header text-white" style="background: var(--bs-gradient);">
+          <h5 class="mb-0">
+            <i class="bi bi-bar-chart-fill me-1"></i> Proposal Status
+          </h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="ratio ratio-4x3">
+            <canvas id="proposalChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-header text-white" style="background: var(--bs-gradient);">
+          <h5 class="mb-0">
+            <i class="bi bi-currency-dollar me-1"></i> Financial Overview
+          </h5>
+        </div>
+        <div class="card-body">
+          <p class="mb-2"><strong>Total Expected Earning:</strong> ${{ financials.total_earning }}</p>
+          <p><strong>Total Expected Cost:</strong> ${{ financials.total_cost }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-header text-white" style="background: var(--bs-gradient);">
+          <h5 class="mb-0">
+            <i class="bi bi-check2-square me-1"></i> Tasks Status
+          </h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="ratio ratio-4x3">
+            <canvas id="taskChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const proposalData = {
+    labels: {{ (proposals | map(attribute='status') | list) | tojson }},
+    datasets: [{
+      label: 'Proposals',
+      data: {{ (proposals | map(attribute='count') | list) | tojson }},
+      backgroundColor: ['#36a2eb', '#4bc0c0', '#ff6384'],
+      borderWidth: 1
+    }]
+  };
+
+  const taskData = {
+    labels: {{ (tasks | map(attribute='status') | list) | tojson }},
+    datasets: [{
+      label: 'Tasks',
+      data: {{ (tasks | map(attribute='count') | list) | tojson }},
+      backgroundColor: ['#ffcd56', '#ff9f40', '#9966ff'],
+      borderWidth: 1
+    }]
+  };
+
+  new Chart(document.getElementById('proposalChart'), {
+    type: 'pie',
+    data: proposalData,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: { enabled: true }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('taskChart'), {
+    type: 'pie',
+    data: taskData,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: { enabled: true }
+      }
+    }
+  });
+</script>
+{% endblock %}
+
 {% endblock %}

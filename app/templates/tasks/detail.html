@@ -1,38 +1,87 @@
 {% extends 'base.html' %}
-{% block title %}Projects Listing{% endblock %}
+{% block title %}Task Detail | Agency System{% endblock %}
+
 {% block content %}
+<div class="container py-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb bg-transparent p-0 mb-0">
+      <li class="breadcrumb-item"><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('tasks.list_tasks') }}">Tasks</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Detail</li>
+    </ol>
+  </nav>
 
+  <!-- Task Detail Card -->
+  <div class="card shadow-sm border-0">
+    <div class="card-header text-white" style="background: var(--bs-gradient);">
+      <h4 class="mb-0">Task Details</h4>
+    </div>
 
-<h2>Task Details</h2>
-<label><b>Description:</b></label>
-<p>{{ task.description }}</p>
+    <div class="card-body">
+      <dl class="row">
+        <dt class="col-sm-4">Description</dt>
+        <dd class="col-sm-8">{{ task.description }}</dd>
 
-<label><b>Priority:</b></label>
-<p>{{ task.priority }}</p>
+        <dt class="col-sm-4">Priority</dt>
+        <dd class="col-sm-8">
+          <span class="badge 
+            {% if task.priority == 'High' %}bg-danger
+            {% elif task.priority == 'Medium' %}bg-warning
+            {% else %}bg-secondary{% endif %}
+          ">
+            {{ task.priority }}
+          </span>
+        </dd>
 
-<label><b>Assigned To:</b></label>
-<p>{{ task.assigned_to_email }}</p>
+        <dt class="col-sm-4">Assigned To</dt>
+        <dd class="col-sm-8">{{ task.assigned_to_email }}</dd>
 
-  <label><b>Deadline:</b></label>
-<p>{{ task.deadline_datetime }}</p>
+        <dt class="col-sm-4">Deadline</dt>
+        <dd class="col-sm-8">
+          {{ task.deadline_datetime.strftime('%Y-%m-%d %H:%M') if task.deadline_datetime else '—' }}
+        </dd>
 
-<label><b>Created:</b></label>
-<p>{{ task.created_datetime }}</p>
+        <dt class="col-sm-4">Created</dt>
+        <dd class="col-sm-8">
+          {{ task.created_datetime.strftime('%Y-%m-%d %H:%M') if task.created_datetime else '—' }}
+        </dd>
 
-<label><b>Completed:</b></label>
-<p>{{ task.completed_datetime or 'Not completed yet' }}</p>
+        <dt class="col-sm-4">Completed</dt>
+        <dd class="col-sm-8">
+          {{ task.completed_datetime.strftime('%Y-%m-%d %H:%M') if task.completed_datetime else 'Not completed yet' }}
+        </dd>
 
-<label><b>Owner:</b></label>
-<p>{{ task.owner_email }}</p>
+        <dt class="col-sm-4">Owner</dt>
+        <dd class="col-sm-8">{{ task.owner_email }}</dd>
 
-<label><b>Job:</b></label>
-<p>{{ task.job_id }}</p>
+        <dt class="col-sm-4">Job ID</dt>
+        <dd class="col-sm-8">{{ task.job_id }}</dd>
 
-<label><b>Project:</b></label>
-<p>{{ task.project_id }}</p>
+        <dt class="col-sm-4">Project ID</dt>
+        <dd class="col-sm-8">{{ task.project_id }}</dd>
+      </dl>
+    </div>
 
-<a class="btn btn-warning" href="{{ url_for('tasks.update_task', task_id=task.task_id) }}">Edit</a>
-<form method="POST" action="{{ url_for('tasks.delete_task', task_id=task.task_id) }}">
-  <button class="btn btn-danger" type="submit">Delete</button>
-</form>
+    <!-- Actions -->
+    <div class="card-footer bg-transparent border-top-0 d-flex justify-content-end gap-2">
+      <a href="{{ url_for('tasks.update_task', task_id=task.task_id) }}"
+         class="btn btn-outline-warning">
+        <i class="bi bi-pencil me-1"></i>Edit
+      </a>
+      <form method="POST"
+            action="{{ url_for('tasks.delete_task', task_id=task.task_id) }}"
+            class="d-inline">
+        <button type="submit"
+                class="btn btn-outline-danger"
+                onclick="return confirm('Delete this task?');">
+          <i class="bi bi-trash me-1"></i>Delete
+        </button>
+      </form>
+      <a href="{{ url_for('tasks.list_tasks') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>Back to Tasks
+      </a>
+    </div>
+  </div>
+</div>
 {% endblock %}

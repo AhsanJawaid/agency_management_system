@@ -1,13 +1,50 @@
 {% extends "base.html" %}
+{% block title %}Submit Proposal | Agency System{% endblock %}
+
 {% block content %}
-  <div class="container mt-5">
-      <h2>Submit Proposal for "{{ job.title }}"</h2>
-    <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
-    <form method="POST">
+<div class="container py-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb bg-transparent p-0 mb-0">
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('jobs.list_jobs') }}">Jobs</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Submit Proposal
+      </li>
+    </ol>
+  </nav>
+
+  <!-- Proposal Form Card -->
+  <div class="card shadow-sm border-0 mx-auto" style="max-width: 700px;">
+    <div class="card-header text-white" style="background: var(--bs-gradient);">
+      <h4 class="mb-0">Submit Proposal for &ldquo;{{ job.title }}&rdquo;</h4>
+    </div>
+    <div class="card-body">
+      <form method="POST" class="row g-3">
         {{ form.hidden_tag() }}
-        <div class="mb-3">{{ form.bid_amount.label }} {{ form.bid_amount(class="form-control") }}</div>
-        <div class="mb-3">{{ form.cover_letter.label }} {{ form.cover_letter(class="form-control") }}</div>
-        <div class="mb-3">{{ form.submit(class="btn btn-primary") }}</div>
-    </form>
+
+        <div class="col-12">
+          {{ form.bid_amount.label(class="form-label") }}
+          {{ form.bid_amount(class="form-control", placeholder="e.g. 150.00") }}
+        </div>
+
+        <div class="col-12">
+          {{ form.cover_letter.label(class="form-label") }}
+          {{ form.cover_letter(class="form-control", rows=6, placeholder="Write your cover letter…") }}
+        </div>
+
+        <div class="col-12 text-end">
+          <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-arrow-left me-1"></i>Cancel
+          </a>
+          {{ form.submit(class="btn btn-accent px-4") }}
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}

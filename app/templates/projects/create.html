@@ -1,16 +1,59 @@
 {% extends 'base.html' %}
-{% block title %}Projects Listing{% endblock %}
+{% block title %}Create Project | Agency System{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-  <h2>Your Projects</h2>
-  <a href="{{ url_for('main.dashboard') }}">Dashboard</a> / <a href="{{ url_for('projects.list_projects') }}">Projects Listing</a>
-  <form method="POST">
-    {{ form.hidden_tag() }}
-    <div class="mb-3">{{ form.job_id.label }} {{ form.job_id(class="form-control") }}</div>
-    <div class="mb-3">{{ form.title.label }} {{ form.title(class="form-control") }}</div>
-    <div class="mb-3">{{ form.description.label }} {{ form.description(class="form-control") }}</div>
-    <div class="mb-3">{{ form.status.label }} {{ form.status(class="form-control") }}</div>
-    {{ form.submit(class="btn btn-primary") }}
-  </form>
+<div class="container py-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb bg-transparent p-0 mb-0">
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('projects.list_projects') }}">Projects Listing</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Create Project</li>
+    </ol>
+  </nav>
+
+  <!-- Form Card -->
+  <div class="card shadow-sm border-0 mx-auto" style="max-width: 600px;">
+    <div class="card-header text-white" style="background: var(--bs-gradient);">
+      <h4 class="mb-0">Create New Project</h4>
+    </div>
+
+    <div class="card-body">
+      <form method="POST" class="row g-3">
+        {{ form.hidden_tag() }}
+
+        <div class="col-12">
+          {{ form.job_id.label(class="form-label") }}
+          {{ form.job_id(class="form-control", placeholder="Select job ID or type manually") }}
+        </div>
+
+        <div class="col-12">
+          {{ form.title.label(class="form-label") }}
+          {{ form.title(class="form-control", placeholder="Project title") }}
+        </div>
+
+        <div class="col-12">
+          {{ form.description.label(class="form-label") }}
+          {{ form.description(class="form-control", rows=4, placeholder="Brief description of the project…") }}
+        </div>
+
+        <div class="col-12">
+          {{ form.status.label(class="form-label") }}
+          {{ form.status(class="form-select") }}
+        </div>
+
+        <div class="col-12 text-end">
+          <a href="{{ url_for('projects.list_projects') }}" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-arrow-left me-1"></i>Cancel
+          </a>
+          {{ form.submit(class="btn btn-accent px-4") }}
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -1,28 +1,79 @@
 {% extends 'base.html' %}
-{% block title %}Tasks Listing{% endblock %}
-{% block content %}
-<div class="container mt-5">
-  <h2>Create Task</h2>
-  <a href="{{ url_for('main.dashboard') }}">Dashboard</a> / <a href="{{ url_for('tasks.list_tasks') }}">Tasks Listing</a>
-  <form method="POST">
-    {{ form.hidden_tag() }}
-    <div class="mb-3">{{ form.job_id.label }} {{ form.job_id(class="form-control",id="job-dropdown") }}</div>
-    <div class="mb-3">{{ form.project_id.label }} {{ form.project_id(class="form-control",id="project-dropdown") }}</div>
-    <div class="mb-3">{{ form.assigned_to_email.label }} {{ form.assigned_to_email(class="form-control") }}</div>
-    <div class="mb-3">{{ form.deadline_datetime.label }} {{ form.deadline_datetime(class="form-control") }}</div>
-    <div class="mb-3">{{ form.priority.label }} {{ form.priority(class="form-control") }}</div>
-    <div class="mb-3">{{ form.description.label }} {{ form.description(class="form-control") }}</div>
-    {{ form.submit(class="btn btn-primary") }}
-  </form>
+{% block title %}Create Task | Agency System{% endblock %}
 
+{% block content %}
+<div class="container py-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb bg-transparent p-0 mb-0">
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('tasks.list_tasks') }}">Tasks Listing</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Create Task</li>
+    </ol>
+  </nav>
+
+  <!-- Form Card -->
+  <div class="card shadow-sm border-0 mx-auto" style="max-width: 700px;">
+    <div class="card-header text-white" style="background: var(--bs-gradient);">
+      <h4 class="mb-0">Create New Task</h4>
+    </div>
+
+    <div class="card-body">
+      <form method="POST" class="row g-3">
+        {{ form.hidden_tag() }}
+
+        <div class="col-md-6">
+          {{ form.job_id.label(class="form-label") }}
+          {{ form.job_id(class="form-select", id="job-dropdown") }}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.project_id.label(class="form-label") }}
+          {{ form.project_id(class="form-select", id="project-dropdown") }}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.assigned_to_email.label(class="form-label") }}
+          {{ form.assigned_to_email(class="form-control", placeholder="user@example.com") }}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.deadline_datetime.label(class="form-label") }}
+          {{ form.deadline_datetime(class="form-control") }}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.priority.label(class="form-label") }}
+          {{ form.priority(class="form-select") }}
+        </div>
+
+        <div class="col-12">
+          {{ form.description.label(class="form-label") }}
+          {{ form.description(class="form-control", rows=4, placeholder="Brief task description…") }}
+        </div>
+
+        <div class="col-12 text-end">
+          <a href="{{ url_for('tasks.list_tasks') }}" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-arrow-left me-1"></i>Cancel
+          </a>
+          {{ form.submit(class="btn btn-accent px-4") }}
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% block scripts %}
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('job-dropdown').addEventListener('change', function () {
-      const jobId = this.value;
-      const projectDropdown = document.getElementById('project-dropdown');
+    const jobDropdown = document.getElementById('job-dropdown');
+    const projectDropdown = document.getElementById('project-dropdown');
 
+    jobDropdown.addEventListener('change', function () {
+      const jobId = this.value;
       fetch(`/tasks/projects-by-job/${jobId}`)
         .then(res => res.json())
         .then(data => {

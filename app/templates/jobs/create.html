@@ -1,24 +1,99 @@
 {% extends 'base.html' %}
-{% block title %}Create Job{% endblock %}
+{% block title %}Create Job | Agency System{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-  <h2>Create Job</h2>
-  <a href="{{ url_for('main.dashboard') }}">Dashboard</a> / <a href="{{ url_for('jobs.list_jobs') }}">Jobs Listing</a>
-  <form method="POST">
-    {{ form.hidden_tag() }}
-    <div class="mb-3">{{ form.job_id.label }} {{ form.job_id(class="form-control") }}</div>
-    <div class="mb-3">{{ form.title.label }} {{ form.title(class="form-control") }}</div>
-    <div class="mb-3">{{ form.description.label }} {{ form.description(class="form-control") }}</div>
-    <div class="mb-3">{{ form.category.label }} {{ form.category(class="form-control") }}</div>
-    <div class="mb-3">{{ form.skills_requested.label }} {{ form.skills_requested(class="form-control") }}</div>
-    <div class="mb-3">{{ form.deadline.label }} {{ form.deadline(class="form-control") }}</div>
-    <div class="mb-3">{{ form.expected_cost.label }} {{ form.expected_cost(class="form-control") }}</div>
-    <div class="mb-3">{{ form.expected_earning.label }} {{ form.expected_earning(class="form-control") }}</div>
-    <div class="mb-3">{{ form.client_rating.label }} {{ form.client_rating(class="form-control") }}</div>
-    <div class="mb-3">{{ form.feasibility_score.label }} {{ form.feasibility_score(class="form-control") }}</div>
-    <div class="mb-3">{{ form.link.label }} {{ form.link(class="form-control") }}</div>
-    <div class="mb-3">{{ form.stage.label }} {{ form.stage(class="form-control") }}</div>
-    {{ form.submit(class="btn btn-primary") }}
-  </form>
+<div class="container py-5">
+  <!-- Breadcrumbs -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb bg-transparent p-0">
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('jobs.list_jobs') }}">Jobs Listing</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Create Job</li>
+    </ol>
+  </nav>
+
+  <!-- Form Card -->
+  <div class="card shadow-sm border-0">
+    <div class="card-header text-white" style="background: var(--bs-gradient);">
+      <h4 class="mb-0">Create New Job</h4>
+    </div>
+
+    <div class="card-body">
+      <form method="POST" class="row g-3">
+        {{ form.hidden_tag() }}
+
+        <div class="col-md-6">
+          {{ form.job_id.label(class="form-label") }}
+          {{ form.job_id(class="form-control", placeholder="e.g. JOB-001") }}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.title.label(class="form-label") }}
+          {{ form.title(class="form-control", placeholder="Job Title") }}
+        </div>
+
+        <div class="col-12">
+          {{ form.description.label(class="form-label") }}
+          {{ form.description(class="form-control", rows=4, placeholder="Brief description…") }}
+        </div>
+
+        <div class="col-md-4">
+          {{ form.category.label(class="form-label") }}
+          {{ form.category(class="form-select") }}
+        </div>
+
+        <div class="col-md-4">
+          {{ form.skills_requested.label(class="form-label") }}
+          {{ form.skills_requested(class="form-control", placeholder="e.g. Python, SQL") }}
+        </div>
+
+        <div class="col-md-4">
+          {{ form.deadline.label(class="form-label") }}
+          {{ form.deadline(class="form-control") }}
+        </div>
+
+        <div class="col-md-4">
+          {{ form.expected_cost.label(class="form-label") }}
+          {{ form.expected_cost(class="form-control") }}
+        </div>
+
+        <div class="col-md-4">
+          {{ form.expected_earning.label(class="form-label") }}
+          {{ form.expected_earning(class="form-control") }}
+        </div>
+
+        <div class="col-md-4">
+          {{ form.client_rating.label(class="form-label") }}
+          {{ form.client_rating(class="form-control") }}
+        </div>
+
+        <div class="col-md-4">
+          {{ form.feasibility_score.label(class="form-label") }}
+          {{ form.feasibility_score(class="form-control") }}
+        </div>
+
+        <div class="col-md-8">
+          {{ form.link.label(class="form-label") }}
+          {{ form.link(class="form-control", placeholder="http://...") }}
+        </div>
+
+        <div class="col-md-4">
+          {{ form.stage.label(class="form-label") }}
+          {{ form.stage(class="form-select") }}
+        </div>
+
+        <div class="col-12 text-end">
+          <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-arrow-left me-1"></i>Cancel
+          </a>
+          {{ form.submit(class="btn btn-accent px-4") }}
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}

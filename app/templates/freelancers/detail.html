@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Freelancer Profile | Agency System{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb bg-transparent p-0">
+      <li class="breadcrumb-item"><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('freelancers.list_freelancers') }}">Freelancers</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Profile</li>
+    </ol>
+  </nav>
+
+  <!-- Profile Card -->
+  <div class="card shadow-sm border-0 mx-auto" style="max-width: 700px;">
+    <div class="card-header text-white text-center" style="background: var(--bs-gradient);">
+      <i class="bi bi-person-circle fs-2"></i>
+      <h4 class="fw-bold mt-2 mb-0">{{ freelancer.first_name }} {{ freelancer.last_name }}</h4>
+    </div>
+
+    <div class="card-body">
+      <dl class="row mb-0">
+        <dt class="col-sm-4">Email</dt>
+        <dd class="col-sm-8">{{ freelancer.email }}</dd>
+
+        <dt class="col-sm-4">Contact</dt>
+        <dd class="col-sm-8">{{ freelancer.contact or '—' }}</dd>
+
+        <dt class="col-sm-4">Title</dt>
+        <dd class="col-sm-8">{{ freelancer.title or '—' }}</dd>
+
+        <dt class="col-sm-4">Hourly Rate</dt>
+        <dd class="col-sm-8">${{ freelancer.hourly_rate or '—' }}</dd>
+
+        <dt class="col-sm-4">Connects Balance</dt>
+        <dd class="col-sm-8">{{ freelancer.connects_balance or '—' }}</dd>
+
+        <dt class="col-sm-4">Milestone Rates</dt>
+        <dd class="col-sm-8">{{ freelancer.milestone_rates or '—' }}</dd>
+
+        <dt class="col-sm-4">Upwork Profile</dt>
+        <dd class="col-sm-8">
+          {% if freelancer.upwork_profile %}
+            <a href="{{ freelancer.upwork_profile }}" target="_blank">{{ freelancer.upwork_profile }}</a>
+          {% else %}
+            —
+          {% endif %}
+        </dd>
+
+        <dt class="col-sm-4">Active</dt>
+        <dd class="col-sm-8">
+          {% if freelancer.is_active %}
+            <span class="badge bg-success">Yes</span>
+          {% else %}
+            <span class="badge bg-secondary">No</span>
+          {% endif %}
+        </dd>
+      </dl>
+    </div>
+
+    <!-- Actions -->
+    <div class="card-footer bg-transparent text-end d-flex justify-content-end gap-2">
+      <a href="{{ url_for('freelancers.edit_freelancer', email=freelancer.email) }}" class="btn btn-outline-warning">
+        <i class="bi bi-pencil me-1"></i>Edit
+      </a>
+      <form method="POST" action="{{ url_for('freelancers.delete_freelancer', email=freelancer.email) }}">
+        <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Delete this freelancer?');">
+          <i class="bi bi-trash me-1"></i>Delete
+        </button>
+      </form>
+      <a href="{{ url_for('freelancers.list_freelancers') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>Back to List
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

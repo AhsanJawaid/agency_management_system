@@ -1,23 +1,74 @@
 {% extends 'base.html' %}
-{% block title %}Jobs Listing{% endblock %}
+{% block title %}Jobs | Agency System{% endblock %}
+
 {% block content %}
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">All Jobs</h2>
+    <a href="{{ url_for('jobs.create_job') }}" class="btn btn-accent">
+      <i class="bi bi-plus-lg me-1"></i> New Job
+    </a>
+  </div>
 
-<div class="container mt-5">
-  <h2>All Jobs</h2>
-  <a href="{{ url_for('jobs.create_job') }}">➕ Create Job</a>
-  <ul>
-    {% for job in jobs %}
-      <li>
-        <strong>{{ job.title }}</strong> — {{ job.stage }}
-        <a href="{{ url_for('jobs.view_job', job_id=job.job_id) }}">View</a>
-        <a href="{{ url_for('jobs.update_job', job_id=job.job_id) }}">Edit</a>
-        <a href="{{ url_for('proposals.list_for_job', job_id=job.job_id) }}">Proposals</a>
-        <form method="POST" action="{{ url_for('jobs.delete_job', job_id=job.job_id) }}" style="display:inline;">
-          <button class="btn btn-danger" type="submit">Delete</button>
-        </form>
-      </li>
-    {% endfor %}
-  </ul>
-
+  <div class="table-responsive shadow-sm">
+    <table class="table table-hover align-middle bg-white mb-0">
+      <thead class="table-primary">
+        <tr>
+          <th>Title</th>
+          <th>Stage</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for job in jobs %}
+        <tr>
+          <td>{{ job.title }}</td>
+          <td>
+            <span class="badge 
+              {% if job.stage == 'Open' %}bg-success
+              {% elif job.stage == 'Closed' %}bg-secondary
+              {% else %}bg-warning{% endif %}
+            ">
+              {{ job.stage }}
+            </span>
+          </td>
+          <td class="text-end">
+            <a href="{{ url_for('jobs.view_job', job_id=job.job_id) }}"
+               class="btn btn-sm btn-outline-primary me-1" title="View">
+              <i class="bi bi-eye"></i>
+            </a>
+            <a href="{{ url_for('jobs.update_job', job_id=job.job_id) }}"
+               class="btn btn-sm btn-outline-warning me-1" title="Edit">
+              <i class="bi bi-pencil"></i>
+            </a>
+            <a href="{{ url_for('proposals.list_for_job', job_id=job.job_id) }}"
+               class="btn btn-sm btn-outline-info me-1" title="Proposals">
+              <i class="bi bi-file-earmark-text"></i>
+            </a>
+            <form method="POST"
+                  action="{{ url_for('jobs.delete_job', job_id=job.job_id) }}"
+                  class="d-inline">
+              <button type="submit"
+                      class="btn btn-sm btn-outline-danger"
+                      onclick="return confirm('Delete this job?');"
+                      title="Delete">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="3" class="text-center py-4 text-muted">
+            No jobs found. 
+            <a href="{{ url_for('jobs.create_job') }}" class="text-decoration-none">
+              Create one now
+            </a>.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

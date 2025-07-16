@@ -1,44 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Agency Dashboard{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>{% block title %}Agency Dashboard{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-…" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bs-primary: #6366f1;
+      --bs-secondary: #ec4899;
+      --bs-success: #000;
+      --bs-gradient: linear-gradient(
+        90deg,
+        var(--bs-primary),
+        var(--bs-secondary)
+      );
+    }
+
+    .navbar-gradient {
+      background: var(--bs-gradient) !important;
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .nav-link {
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--bs-success) !important;
+    }
+
+    .badge-freelancer {
+      background-color: var(--bs-success);
+      font-size: 0.9rem;
+      padding: 0.35em 0.75em;
+    }
+
+    .btn-accent {
+      background-color: var(--bs-secondary);
+      color: #fff;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+
+    .btn-accent:hover {
+      background-color: #d33d8b;
+    }
+
+    .alert-message {
+      background-color: #ffe9ec; /* soft red or pink */
+      border: 1px solid #ffccd5;
+      color: #b30000;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+    }
+
+  </style>
 </head>
-<body>
-    {% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('main.index') }}">Upwork Agency</a>
+<body class="d-flex flex-column min-vh-100">
+  {% block navbar %}
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-gradient py-3">
+    <div class="container">
+      <a class="navbar-brand fs-3" href="{{ url_for('main.index') }}">Upwork Agency</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarContent"
+        aria-controls="navbarContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          {% if current_user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('main.dashboard') }}">
+                Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('jobs.list_jobs') }}">
+                Jobs
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('projects.list_projects') }}">
+                My Projects
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('tasks.list_tasks') }}">
+                My Tasks
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('freelancers.list_freelancers') }}">
+                Freelancers
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+          {% if current_user.is_authenticated %}
             {% if current_user.email in freelancer_emails %}
-            <p>Welcome, Freelancer!</p>
+              <li class="nav-item me-3">
+                <span class="badge badge-freelancer">Freelancer</span>
+              </li>
             {% endif %}
-
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">
-                    {% if current_user.is_authenticated  %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('jobs.list_jobs') }}">Jobs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('projects.list_projects') }}">My Projects</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('tasks.list_tasks') }}">My Tasks</a></li>
-                    {% endif %}
-                </ul>
-                <ul class="navbar-nav ms-auto">
-                    {% if current_user.is_authenticated  %}
-                        <li class="nav-item">Welcome, <strong>{{ current_user.first_name }}</strong></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a></li>
-                    {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.signup') }}">Sign Up</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </nav>
-    {% endblock %}
-
-    <div class="container mt-4">
-        {% block content %}{% endblock %}
+            <li class="nav-item me-3 text-white">
+              Welcome, <strong>{{ current_user.first_name }}</strong>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-outline-light" href="{{ url_for('auth.logout') }}">
+                Logout
+              </a>
+            </li>
+          {% else %}
+            <li class="nav-item me-2">
+              <a class="btn btn-outline-light" href="{{ url_for('auth.login') }}">
+                Login
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-accent" href="{{ url_for('auth.signup') }}">
+                Sign Up
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
     </div>
+  </nav>
+  {% endblock %}
+
+  <!-- Flash messages -->
+  <div class="container mt-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+          <div
+            class="alert alert-{{ category }} alert-dismissible fade show"
+            role="alert"
+          >
+            {{ msg }}
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Main Content -->
+  <div class="container flex-fill mt-5">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-light text-center py-3 mt-auto">
+    &copy; {{ current_year }} Upwork Agency. All rights reserved.
+  </footer>
+
+  <!-- Bootstrap JS Bundle -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-…"
+    crossorigin="anonymous"
+  ></script>
 </body>
 </html>

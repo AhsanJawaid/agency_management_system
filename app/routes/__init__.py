@@ -5,6 +5,7 @@ from .projects import projects_bp
 from .tasks import tasks_bp
 from .users import users_bp
 from .proposals  import proposals_bp
+from .freelancers  import freelancer_bp
 
 def register_blueprints(app):
     app.register_blueprint(main_bp)
@@ -14,3 +15,4 @@ def register_blueprints(app):
     app.register_blueprint(tasks_bp, url_prefix='/tasks')
     app.register_blueprint(users_bp, url_prefix='/users')
     app.register_blueprint(proposals_bp)
+    app.register_blueprint(freelancer_bp, url_prefix='/freelancers')

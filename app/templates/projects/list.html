@@ -1,18 +1,36 @@
 {% extends 'base.html' %}
-{% block title %}Projects Listing{% endblock %}
-{% block content %}
+{% block title %}Projects | Agency System{% endblock %}
 
-<div class="container mt-5">
-  <h2>Your Projects</h2>
-  <a href="{{ url_for('projects.create_project') }}">➕ Create New</a>
-  <ul>
+{% block content %}
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">Your Projects</h2>
+    <a href="{{ url_for('projects.create_project') }}" class="btn btn-accent">
+      <i class="bi bi-plus-lg me-1"></i> New Project
+    </a>
+  </div>
+
+  <div class="list-group shadow-sm">
     {% for project in projects %}
-      <li>
-        <a href="{{ url_for('projects.view_project', id=project.id) }}">
-          {{ project.title }} — {{ project.status }}
-        </a>
-      </li>
+      <a href="{{ url_for('projects.view_project', id=project.id) }}"
+         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        <div>
+          <h6 class="mb-1">{{ project.title }}</h6>
+          <small class="text-muted">Status: {{ project.status }}</small>
+        </div>
+        <span class="badge 
+          {% if project.status == 'Active' %}bg-success
+          {% elif project.status == 'Completed' %}bg-secondary
+          {% else %}bg-warning{% endif %}
+        ">
+          {{ project.status }}
+        </span>
+      </a>
+    {% else %}
+      <div class="list-group-item text-center text-muted">
+        No projects found. <a href="{{ url_for('projects.create_project') }}" class="text-decoration-none">Create one</a>.
+      </div>
     {% endfor %}
-  </ul>
+  </div>
 </div>
 {% endblock %}
