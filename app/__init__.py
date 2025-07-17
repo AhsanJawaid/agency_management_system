@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from app.extensions import db, login_manager, mail
+from app.extensions import db, login_manager, mail, socketio
 from app.routes import register_blueprints
 
 def create_app():
@@ -9,6 +9,7 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    socketio.init_app(app)
 
     register_blueprints(app)
     return app

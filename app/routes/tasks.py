@@ -56,12 +56,12 @@ def create_task():
             link=url_for('tasks.view_task', task_id=task.task_id)
         )
 
-        send_email(
-            subject="New Task Assigned",
-            recipients=[task.assigned_to_email],
-            body_text=f"You've been assigned a new task: {task.description}",
-            body_html=f"<p>New task: <strong>{task.description}</strong><br>Deadline: {task.deadline_datetime}</p>"
-        )
+        # send_email(
+        #     subject="New Task Assigned",
+        #     recipients=[task.assigned_to_email],
+        #     body_text=f"You've been assigned a new task: {task.description}",
+        #     body_html=f"<p>New task: <strong>{task.description}</strong><br>Deadline: {task.deadline_datetime}</p>"
+        # )
         return redirect(url_for('tasks.list_tasks'))
     return render_template('tasks/create.html', form=form)
 

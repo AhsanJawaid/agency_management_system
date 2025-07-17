@@ -4,6 +4,8 @@ from app.extensions import db
 from app.models.project import Project
 from app.models.job import Jobs
 from app.forms.project_form import ProjectForm
+from app.utils.notifications import create_notification
+from app.utils.emails import send_email
 
 projects_bp = Blueprint('projects', __name__, url_prefix='/projects')
 
@@ -30,6 +32,25 @@ def create_project():
         db.session.add(project)
         db.session.commit()
         flash("Project created!")
+        # Notify freelancer
+        create_notification(
+            recipient_email=project.owner_email,
+            message=f"New project assigned: '{project.description}'",
+            link=url_for('projects.view_project', id=project.id)
+        )
+
+        create_notification(
+            recipient_email=project.owner_email,
+            message=f"Project created and assigned to {project.owner_email}: '{project.description}'",
+            link=url_for('projects.view_project', id=project.id)
+        )
+
+        # send_email(
+        #     subject="New Project Assigned",
+        #     recipients=[project.owner_email],
+        #     body_text=f"You've been assigned a new project: {project.description}",
+        #     body_html=f"<p>New Project: <strong>{project.description}</strong></p>"
+        # )
         return redirect(url_for('projects.list_projects'))
     return render_template('projects/create.html', form=form)
 

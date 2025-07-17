@@ -123,6 +123,27 @@
                 <span class="badge badge-freelancer">Freelancer</span>
               </li>
             {% endif %}
+            <li class="nav-item dropdown">
+              <a class="nav-link position-relative" href="#" id="notifBell" role="button" data-bs-toggle="dropdown">
+                <i class="bi bi-bell"></i>
+                <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="notifCount">0</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded" aria-labelledby="notifBell" style="min-width: 320px;">
+                <li class="bg-gradient text-white px-3 py-2">
+                  <h6 class="mb-0"><i class="bi bi-bell-fill me-1"></i> Notifications</h6>
+                </li>
+                <li>
+                  <div id="notifList" class="list-group list-group-flush overflow-auto" style="max-height: 300px;"></div>
+                </li>
+                <li><hr class="dropdown-divider m-0"></li>
+                <li>
+                  <a class="dropdown-item text-center fw-semibold text-accent py-2" href="{{ url_for('notifications.list_notifications') }}">
+                    View All <i class="bi bi-arrow-right-short"></i>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
             <li class="nav-item me-3 text-white">
               Welcome, <strong>{{ current_user.first_name }}</strong>
             </li>
@@ -187,5 +208,47 @@
     integrity="sha384-…"
     crossorigin="anonymous"
   ></script>
+  <script>
+document.getElementById('notifBell').addEventListener('mouseover', () => {
+  fetch('/notifications/unread')
+    .then(res => res.json())
+    .then(data => {
+      const list = document.getElementById('notifList');
+      const badge = document.getElementById('notifCount');
+      list.innerHTML = '';
+
+      badge.textContent = data.length;
+      badge.style.display = data.length > 0 ? 'inline' : 'none';
+
+      data.forEach(n => {
+        const item = document.createElement('li');
+        item.className = 'dropdown-item text-wrap';
+        item.innerHTML = `<div><strong>${n.message}</strong><br><small class="text-muted">${n.timestamp}</small></div>`;
+        list.appendChild(item);
+      });
+    });
+});
+</script>
+<script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+<script>
+  const socket = io();
+
+  socket.on('new_notification', function(data) {
+    // if (data.email === "{{ current_user.email }}") {
+      const list = document.getElementById('notifList');
+      const badge = document.getElementById('notifCount');
+
+      // Update unread count
+      badge.textContent = parseInt(badge.textContent || '0') + 1;
+      badge.style.display = 'inline';
+
+      // Prepend new notification
+      const item = document.createElement('li');
+      item.className = 'dropdown-item text-wrap';
+      item.innerHTML = `<div><strong>${data.message}</strong><br><small class="text-muted">${data.timestamp}</small></div>`;
+      list.prepend(item);
+    // }
+  });
+</script>
 </body>
 </html>
