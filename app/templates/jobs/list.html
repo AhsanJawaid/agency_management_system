@@ -5,9 +5,16 @@
 <div class="container py-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold">All Jobs</h2>
-    <a href="{{ url_for('jobs.create_job') }}" class="btn btn-accent">
-      <i class="bi bi-plus-lg me-1"></i> New Job
-    </a>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+      <a href="{{ url_for('jobs.create_job') }}" class="btn btn-accent">
+        <i class="bi bi-plus-lg me-1"></i> New Job
+      </a>
+      <button id="fetchUpworkJobs" class="btn btn-primary d-flex align-items-center gap-2" disabled>
+        <span id="loaderIconDefault"><i class="bi bi-cloud-download me-1"></i></span>
+        <span id="loaderIcon" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+        <span id="loaderText">Fetch Jobs from Upwork</span>
+      </button>
+    </div>
   </div>
 
   <div class="table-responsive shadow-sm">
@@ -71,4 +78,47 @@
     </table>
   </div>
 </div>
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const button = document.getElementById("fetchUpworkJobs");
+  const loaderDefault = document.getElementById("loaderIconDefault");
+  const loader = document.getElementById("loaderIcon");
+  const text = document.getElementById("loaderText");
+
+  button.disabled = false;
+
+  button.addEventListener("click", () => {
+    button.disabled = true;
+    loaderDefault.style.display = 'none';
+    loader.classList.remove("d-none");
+    text.textContent = "Fetching Jobs...";
+
+    fetch("/jobs/import/upwork", {
+      method: "POST"
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        alert(`Imported ${data.count || data.jobs_imported.length} jobs`);
+      } else {
+        alert("⚠️ " + data.message);
+      }
+      location.reload();
+    })
+    .catch(err => {
+      alert("Failed to fetch jobs. Try again.");
+    })
+    .finally(() => {
+      loader.classList.add("d-none");
+      text.textContent = "Fetch Jobs from Upwork";
+      button.disabled = false;
+      loaderDefault.style.display = 'block';
+    });
+  });
+});
+</script>
+{% endblock %}
+
 {% endblock %}

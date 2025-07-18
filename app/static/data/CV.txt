@@ -1,0 +1,10 @@
+Name: Ahsan Jawaid
+Title: Python & Django Developer
+Email: ahsanjawaid1001@gmail.com
+Phone: +92-344-2277641
+Portfolio: https://github.com/AhsanJawaid | https://www.kaggle.com/ahsanjawaidd
+Experience: 10+ years in full-stack development with a focus on backend engineering
+Tech Skills: Django, DRF, Python, PostgreSQL, MySQL, Vue.js, HTMX, Bootstrap, Docker, APIs, Firebase, Laravel, CodeIgniter, Symfony
+Specialties: Building secure web apps, enterprise-grade systems, and dynamic UI/UX integrations
+Work Philosophy: Clean code, agile development, clear communication, scalable architecture
+Location: Karachi, Pakistan

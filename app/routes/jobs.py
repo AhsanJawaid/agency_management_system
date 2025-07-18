@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_required
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask_login import login_required, current_user
 from app.extensions import db
 from app.models.job import Jobs
 from app.forms.job_form import JobForm
+from app.utils.upwork_importer import import_upwork_jobs
 
 jobs_bp = Blueprint('jobs', __name__, url_prefix='/jobs')
 
@@ -24,7 +25,7 @@ def create_job():
         job = Jobs(**data)
         db.session.add(job)
         db.session.commit()
-        flash("Job created!")
+        flash("Job created!", "success")
         return redirect(url_for('jobs.list_jobs'))
     return render_template('jobs/create.html', form=form)
 
@@ -43,7 +44,7 @@ def update_job(job_id):
         for field in form.data:
             setattr(job, field, form.data[field])
         db.session.commit()
-        flash("Job updated!")
+        flash("Job updated!", "success")
         return redirect(url_for('jobs.view_job', job_id=job_id))
     return render_template('jobs/update.html', form=form, job=job)
 
@@ -53,5 +54,11 @@ def delete_job(job_id):
     job = Jobs.query.get_or_404(job_id)
     db.session.delete(job)
     db.session.commit()
-    flash("Job deleted.")
+    flash("Job deleted.", "success")
     return redirect(url_for('jobs.list_jobs'))
+
+@jobs_bp.route('/import/upwork', methods=['POST'])
+@login_required
+def import_jobs_from_upwork():
+    result = import_upwork_jobs(current_user.email)
+    return jsonify(result)

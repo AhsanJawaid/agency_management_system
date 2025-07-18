@@ -16,10 +16,10 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and check_password_hash(user.password, form.password.data):
             login_user(user)
-            flash("Logged in successfully!")
+            flash("Logged in successfully!", "success")
             return redirect(url_for('main.dashboard'))
         else:
-            flash("Invalid credentials.")
+            flash("Invalid credentials.", "danger")
     else:
         print("Form did not validate:", form.errors)
     return render_template('login.html', form=form)
@@ -50,7 +50,7 @@ def signup():
         )
         db.session.add(rel)
         db.session.commit()
-        flash("Account created! Please log in.")
+        flash("Account created! Please log in.", "success")
         return redirect(url_for('auth.login'))
     return render_template('signup.html', form=form)
 
@@ -58,7 +58,7 @@ def signup():
 @login_required
 def logout():
     logout_user()
-    flash("Logged out successfully!")
+    flash("Logged out successfully!", "success")
     return redirect(url_for('auth.login'))
 
 @users_bp.route('/<email>')

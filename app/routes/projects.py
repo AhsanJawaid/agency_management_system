@@ -31,7 +31,7 @@ def create_project():
         )
         db.session.add(project)
         db.session.commit()
-        flash("Project created!")
+        flash("Project created!", "success")
         # Notify freelancer
         create_notification(
             recipient_email=project.owner_email,
@@ -45,12 +45,12 @@ def create_project():
             link=url_for('projects.view_project', id=project.id)
         )
 
-        # send_email(
-        #     subject="New Project Assigned",
-        #     recipients=[project.owner_email],
-        #     body_text=f"You've been assigned a new project: {project.description}",
-        #     body_html=f"<p>New Project: <strong>{project.description}</strong></p>"
-        # )
+        send_email(
+            subject="New Project Assigned",
+            recipients=[project.owner_email],
+            body_text=f"You've been assigned a new project: {project.description}",
+            body_html=f"<p>New Project: <strong>{project.description}</strong></p>"
+        )
         return redirect(url_for('projects.list_projects'))
     return render_template('projects/create.html', form=form)
 
@@ -73,7 +73,7 @@ def update_project(id):
         project.description = form.description.data
         project.status = form.status.data
         db.session.commit()
-        flash("Project updated!")
+        flash("Project updated!", "success")
         return redirect(url_for('projects.view_project', id=id))
     return render_template('projects/update.html', form=form, project=project)
 
@@ -83,5 +83,5 @@ def delete_project(id):
     project = Project.query.get_or_404(id)
     db.session.delete(project)
     db.session.commit()
-    flash("Project deleted.")
+    flash("Project deleted.", "success")
     return redirect(url_for('projects.list_projects'))

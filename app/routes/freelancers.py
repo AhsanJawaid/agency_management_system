@@ -37,7 +37,7 @@ def create_freelancer():
             contact=form.contact.data,
             title=form.title.data,
             hourly_rate=form.hourly_rate.data,
-            milestone_rates=form.milestone_rates.data,
+            milestone_rate=form.milestone_rate.data,
             connects_balance=form.connects_balance.data,
             upwork_profile=form.upwork_profile.data,
             is_active=form.is_active.data
@@ -66,7 +66,7 @@ def edit_freelancer(email):
         user.contact = form.contact.data
         user.title = form.title.data
         user.hourly_rate = form.hourly_rate.data
-        user.milestone_rates = form.milestone_rates.data
+        user.milestone_rate = form.milestone_rate.data
         user.connects_balance = form.connects_balance.data
         user.upwork_profile = form.upwork_profile.data
         user.is_active = form.is_active.data

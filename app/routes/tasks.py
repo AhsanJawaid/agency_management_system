@@ -42,7 +42,7 @@ def create_task():
         )
         db.session.add(task)
         db.session.commit()
-        flash("Task created!")
+        flash("Task created!", "success")
         # Notify freelancer
         create_notification(
             recipient_email=task.assigned_to_email,
@@ -56,12 +56,12 @@ def create_task():
             link=url_for('tasks.view_task', task_id=task.task_id)
         )
 
-        # send_email(
-        #     subject="New Task Assigned",
-        #     recipients=[task.assigned_to_email],
-        #     body_text=f"You've been assigned a new task: {task.description}",
-        #     body_html=f"<p>New task: <strong>{task.description}</strong><br>Deadline: {task.deadline_datetime}</p>"
-        # )
+        send_email(
+            subject="New Task Assigned",
+            recipients=[task.assigned_to_email],
+            body_text=f"You've been assigned a new task: {task.description}",
+            body_html=f"<p>New task: <strong>{task.description}</strong><br>Deadline: {task.deadline_datetime}</p>"
+        )
         return redirect(url_for('tasks.list_tasks'))
     return render_template('tasks/create.html', form=form)
 
@@ -90,7 +90,7 @@ def update_task(task_id):
         task.priority = form.priority.data
         task.description = form.description.data
         db.session.commit()
-        flash("Task updated successfully!")
+        flash("Task updated successfully!", "success")
         return redirect(url_for('tasks.view_task', task_id=task_id))
 
     return render_template('tasks/update.html', form=form, task=task)
@@ -102,7 +102,7 @@ def delete_task(task_id):
     task = Task.query.get_or_404(task_id)
     db.session.delete(task)
     db.session.commit()
-    flash("Task deleted successfully!")
+    flash("Task deleted successfully!", "success")
 
     return redirect(url_for('tasks.list_tasks'))
 

@@ -19,10 +19,10 @@ def login():
         user = User.query.get(form.email.data)
         if user and check_password_hash(user.password, form.password.data):
             login_user(user)
-            flash("Logged in successfully!")
-            return redirect(url_for('projects.list_projects'))
+            flash("Logged in successfully!", "success")
+            return redirect(url_for('main.dashboard'))
         else:
-            flash("Invalid credentials.")
+            flash("Invalid credentials.", "danger")
     return render_template('auth/login.html', form=form)
 
 @auth_bp.route('/signup', methods=['GET', 'POST'])
@@ -30,7 +30,7 @@ def signup():
     form = SignupForm()
     if form.validate_on_submit():
         if User.query.get(form.email.data):
-            flash("Email already registered.")
+            flash("Email already registered.", "warning")
         else:
             hashed_pw = generate_password_hash(form.password.data)
             user = User(
@@ -54,7 +54,7 @@ def signup():
             )
             db.session.add(rel)
             db.session.commit()
-            flash("Account created! Please log in.")
+            flash("Account created! Please log in.", "success")
             return redirect(url_for('auth.login'))
     return render_template('auth/signup.html', form=form)
 
@@ -62,5 +62,5 @@ def signup():
 @login_required
 def logout():
     logout_user()
-    flash("You’ve been logged out.")
+    flash("You’ve been logged out.", "success")
     return redirect(url_for('auth.login'))

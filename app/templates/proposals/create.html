@@ -34,7 +34,14 @@
 
         <div class="col-12">
           {{ form.cover_letter.label(class="form-label") }}
-          {{ form.cover_letter(class="form-control", rows=6, placeholder="Write your cover letter…") }}
+          {{ form.cover_letter(class="form-control", rows=6, placeholder="Write your cover letter…", id="proposalText") }}
+
+          <button type="button" id="generateProposalBtn" class="btn btn-accent mt-2 d-flex align-items-center gap-2">
+            <span id="loaderIconDefault"><i class="bi bi-magic me-1"></i></span>
+            <span id="loaderIcon" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+            <span>Generate Proposal</span>
+          </button>
+
         </div>
 
         <div class="col-12 text-end">
@@ -47,4 +54,38 @@
     </div>
   </div>
 </div>
+{% block scripts %}
+<script>
+const button = document.getElementById("generateProposalBtn");
+const loaderDefault = document.getElementById("loaderIconDefault");
+const loader = document.getElementById("loaderIcon");
+const proposalField = document.getElementById("proposalText");
+button.addEventListener('click', () => {
+  loader.classList.remove("d-none");
+  button.disabled = true;
+  loaderDefault.style.display = 'none';
+
+  const jobId = "{{ job.job_id }}";
+
+  fetch(`/proposals/generate_proposal/${jobId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.proposal) {
+      proposalField.value = data.proposal;
+    } else {
+      proposalField.value = `Error: ${data.error}`;
+    }
+  })
+  .finally(() => {
+    loader.classList.add("d-none");
+    button.disabled = false;
+    loaderDefault.style.display = 'block';
+  });
+});
+</script>
+{% endblock %}
+
 {% endblock %}

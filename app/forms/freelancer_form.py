@@ -9,7 +9,7 @@ class FreelancerForm(FlaskForm):
     contact = StringField('Contact')
     title = StringField('Title', validators=[Optional()])
     hourly_rate = DecimalField('Hourly Rate', validators=[Optional()])
-    milestone_rates = StringField('Milestone Rates', validators=[Optional()])
+    milestone_rate = StringField('Milestone Rates', validators=[Optional()])
     connects_balance = DecimalField('Connects Balance', validators=[Optional()])
     upwork_profile = StringField('Upwork Profile', validators=[Optional()])
     is_active = BooleanField('Active')
