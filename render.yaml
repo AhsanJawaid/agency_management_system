@@ -1,0 +1,4 @@
+buildCommand: |
+  find . -name "*.pyc" -delete
+  find . -name "__pycache__" -delete
+  pip install -r requirements.txt
